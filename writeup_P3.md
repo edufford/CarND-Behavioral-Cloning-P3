@@ -35,9 +35,9 @@ The key contents are:
 
 #### 2. Submission includes functional code
 
-My model was trained using image data collected by the Udacity simulator **running in "Fastest" graphics quality mode**, due to the low processing speed of my laptop.  This mode does not have some visual effects such as shadows from the other graphics modes, so the model needs to be executed in the same mode to be able to drive autonomously as trained.
+My model was trained using image data collected by the [Udacity Simulator](https://github.com/udacity/self-driving-car-sim) **running in "Fastest" graphics quality mode**, due to the low processing speed of my laptop.  This mode does not have some visual effects such as shadows from the other graphics modes, so the model needs to be executed in the same mode to be able to drive autonomously as trained.
 
-The car can be driven autonomously around the track by setting the Udacity simulator to **"Fastest" graphics quality mode** and executing:
+The car can be driven autonomously around the track by setting the simulator to **"Fastest" graphics quality mode** and executing:
 
 ```
 python drive.py model.h5
@@ -49,7 +49,7 @@ My **drive.py** file has one modification to apply a min/max guard on the PI con
 
 I separated the code for gathering the training/validation data sets in **load_data.py** from the code for training and saving the convolution neural network in **model.py**.
 
-The **load_data.py** code saves arrays **X_train.npy, y_train.npy** and **X_valid.npy, y_valid.npy** that contain the file paths for all of the driving images and their corresponding steering angles, including and tuned adjustments for left/right camera and lane-edge recovery driving.
+The **load_data.py** code saves arrays **X_train.npy, y_train.npy** and **X_valid.npy, y_valid.npy** that contain the file paths for all of the driving images and their corresponding steering angles, including tuned steering adjustments for left/right camera and lane-edge recovery driving.
 
 The **model.py** code loads these data set arrays and uses a Python generator to load batches of the image data into memory on demand as the Keras model fit training is executed.  After 10 epochs of training is done, the model file **model.h5** and training history are saved.
 
@@ -61,10 +61,11 @@ See the code comments for more details.
 
 For this project, I wanted to focus on how to generate good quality training data for the neural network to be able to clone driving behavior, so I did not focus much on optimizing the model architecture.
 
-I used Keras to make a sequential model with similar layers to the NVIDIA model in the Apr 25, 2016 paper "[End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316v1.pdf)", because this model has already been shown to be able to control steering angles while adapting to various driving environments.  The input image size of the NVIDIA model was 66 x 200, and the Udacity simulator's generated image size is 160 x 320 so with some cropping it should be similar enough to use this model's architecture.
+I used Keras to make a sequential model with similar layers to the NVIDIA model in the Apr 25, 2016 paper "[End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316v1.pdf)", because this model has already been shown to be able to control steering angles while adapting to various driving environments.  The input image size of the NVIDIA model is 66 x 200, and the Udacity simulator's generated image size is 160 x 320 so with some cropping it should be similar enough to use this model's architecture.
 
 
 <img src="./writeup_images/Nvidia_architecture.jpg" width="500">
+
 *Source: NVIDIA paper "End to End Learning for Self-Driving Cars"*
 
 #### 2. Attempts to reduce overfitting in the model
@@ -89,7 +90,7 @@ My strategy for collecting Track #1 training data was to get 5 types of driving:
 * Data #2 = Driving on the left edge of the road in the normal direction
 * Data #3 = Driving on the right edge of the road in the normal direction
 * Data #4 = Driving in the center of the road in the backwards clockwise direction
-* Data #5 = Driving naturally around the track a few times to get some variation
+* Data #5 = Driving naturally around the track a few more times to get some variation
 
 For all data, 70% of the straight driving data (steering < 0.04) was discarded to prevent a strong bias toward driving straight.
 
@@ -101,7 +102,7 @@ Data #2 and #3 center camera images were used with an **added steering recovery 
 
 Data #4 and #5 center camera images were used as **extra data to help increase variation and improve generalization**.
 
-After gethering all of the training data described above, the final distribution of steering angles is shown below.
+After combining all of the training data described above, the final distribution of steering angles is shown below.
 
 <img src="./writeup_images/steering_histogram.jpg" width="600">
 
@@ -113,9 +114,9 @@ The data has a slight left turn bias (from the counter-clockwise track direction
 
 As discussed above, my approach for choosing the model architecture was to try using the published NVIDIA architecture since the input image sizes are similar and the purpose of the model is the same.
 
-Further optimization could be done by experiments to remove layers or reduce feature dimensions to see if the driving performance can be maintained, but the original architecture already has fast enough prediction performance to be able to drive the Udacity simulator on my laptop so this was not necessary to complete this project.
+Further optimization could be done by experiments to remove layers or reduce feature dimensions to see if the driving performance can be maintained, but the original architecture already has fast enough prediction performance to be able to drive the Udacity simulator in real-time on my laptop so this was not necessary to complete this project.
 
-Also, training time was reasonable using the AWS EC2 g2.2xlarge cloud-based GPU machine, with 10 epochs taking only ~15 min with ~30,000 training images.
+Also, training time was reasonable using an AWS EC2 g2.2xlarge cloud-based GPU machine, with 10 epochs taking only ~15 min with ~30,000 training images.
 
 #### 2. Final Model Architecture
 
@@ -142,7 +143,7 @@ The final model characteristics are shown in the table below compared to the ori
 
 The cropping layer cuts off the top 50 and bottom 20 pixel rows to focus on the road portion of the image, following the "Cropping Layer Code Example" from the Udacity lesson.
 
-After the cropping, the input image dimensions are still larger than the NVIDIA model so there are about 4x more trainable parameters, but the added dropout layers help prevent overfitting and the model is still capable of the end-to-end road feature detection and steering angle prediction to control the vehicle as it drives.
+After the cropping, the input image dimensions are still larger than the NVIDIA model so there are about 4x more trainable parameters, but the added dropout layers help prevent overfitting and the model is still capable of the end-to-end road feature detection and steering angle prediction to drive the vehicle.
 
 #### 3. Creation of the Training Set & Training Process
 
@@ -153,6 +154,7 @@ As described above, the final training data set includes 5 types of driving.  Ex
 **Data #1 = Driving in the center of the road in the normal counter-clockwise direction**
 
 <img src="./writeup_images/center_2017_07_18_11_26_00_660.jpg" width="640">
+
 <img src="./writeup_images/left_2017_07_18_11_26_00_660.jpg" width="318"> <img src="./writeup_images/right_2017_07_18_11_26_00_660.jpg" width="318">
 
 From this data, the center camera image (top image) was used as **baseline data** and split 80% for training and 20% for validation.
@@ -173,7 +175,7 @@ This data was taken driving normally but keeping the **left wheels of the car on
 
 <img src="./writeup_images/center_2017_07_17_11_37_22_583.jpg" width="640">
 
-This data is similar to Data #2, except keeping the **right wheels of the car on the right edge of the road**.
+This data is similar to Data #2, except keeping the **right wheels of the car on the right edge of the road**.  The same 0.9 steering recovery adjustment was added.
 
 ---
 
@@ -185,7 +187,7 @@ This data is similar to Data #1 normal driving, but in the **backwards clockwise
 
 ---
 
-**Data #5 = Driving naturally around the track a few times to get some variation**
+**Data #5 = Driving naturally around the track a few more times to get some variation**
 
 <img src="./writeup_images/center_2017_07_20_11_01_45_896.jpg" width="320"> <img src="./writeup_images/center_2017_07_20_11_03_17_512.jpg" width="320">
 <img src="./writeup_images/center_2017_07_20_11_04_43_236.jpg" width="320"> <img src="./writeup_images/center_2017_07_20_11_06_08_921.jpg" width="320">
@@ -198,7 +200,7 @@ This data is similar to Data #1 normal driving, but **driving naturally for extr
 
 #### 1. Car's ability to navigate the test track
 
-Using the **drive.py** file and the **model.h5** trained model file, the car is able to autonomously drive around Track #1, as shown in the **video.mp4** recorded video.  The steering is not completely natural, and could benefit from some post-processing smoothing to reduce any twitchy steering changes, but overall follows the road and keeps the car in the center of the lane.
+Using the **drive.py** file and the **model.h5** trained model file, the car is able to autonomously drive around Track #1, as shown in the **video.mp4** recorded video.  The steering is not completely natural, and could benefit from some post-processing smoothing to reduce twitchy steering changes, but overall follows the road and keeps the car in the center of the lane.
 
 Even though the model was trained with only Track #1 data sets, the model was generalized enough to **also be able to drive around the extra challenge Track #2** which has lane lines that look completely different and track features such as slopes and sharp hairpin turns.  This is shown in the **extra_video_track2.mp4** recorded video.
 

@@ -6,9 +6,9 @@
 
 ## Overview
 
-This project uses **Keras** to train a convolutional neural network to do **end-to-end steering angle control based on road images** from a Udacity driving simulator.  Training data from driving around one track was used to generate a **saved model file that can be used to drive the car autonomously** on both provided tracks.  This demonstrates the networks ability to generalize road feature detection and control steering by **cloning real driving behavior**, similar to the results from the NVIDIA Apr 25, 2016 paper "[End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316v1.pdf)."
+This project uses **Keras** to train a convolutional neural network to do **end-to-end steering angle control based on road images** from a Udacity driving simulator.  Training data from driving around one track was used to generate a **saved model file that can be used to drive the car autonomously** on both provided tracks.  This demonstrates the neural network's ability to generalize road feature detection and control steering by **cloning real driving behavior**, similar to the results from the NVIDIA Apr 25, 2016 paper "[End to End Learning for Self-Driving Cars](https://arxiv.org/pdf/1604.07316v1.pdf)."
 
-## Files
+## Key Files
 
 | File 					|     Description	        								| 
 |:---------------------:|:---------------------------------------------------------:| 
@@ -23,9 +23,9 @@ This project uses **Keras** to train a convolutional neural network to do **end-
 
 1. Set up [Udacity Self-Driving Car Term 1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit) environment (Python 3, NumPy, Matplotlib, OpenCV, TensorFlow)
 
-2. Run the Udacity Simulator in **"Fastest" graphics quality mode** and select a track to drive autonomously.
+2. Run the [Udacity Simulator](https://github.com/udacity/self-driving-car-sim) in **"Fastest" graphics quality mode** and select a track to drive autonomously.
 
-3. Run the following command to start the driving commands:
+3. Run the following to start the autonomous driving commands:
 
 ```
 python drive.py model.h5
