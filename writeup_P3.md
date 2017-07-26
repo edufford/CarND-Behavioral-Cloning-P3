@@ -196,6 +196,12 @@ This data is similar to Data #1 normal driving, but **driving naturally for extr
 
 ---
 
+**Data augmentation**
+
+All images from the combined data sets above were also augmented by performing a horizontal flip with the corresponding negative steering angle.  This was done in the data generator on the fly as the model training was executed.  An example of a horizontal flip is shown below.
+
+<img src="./writeup_images/center_2017_07_18_11_26_00_660.jpg" width="320"> <img src="./writeup_images/center_2017_07_18_11_26_00_660_flip.jpg" width="320">
+
 ### Simulation
 
 #### 1. Car's ability to navigate the test track
